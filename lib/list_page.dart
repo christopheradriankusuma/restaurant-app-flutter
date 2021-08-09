@@ -3,7 +3,10 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:restaurant_app/restaurant.dart';
 
 class ListPage extends StatelessWidget {
-  static final String routeName = '/list';
+  static const String routeName = '/list';
+  final List<Restaurant> restaurants;
+
+  ListPage({required this.restaurants});
 
   @override
   Widget build(BuildContext context) {
@@ -17,17 +20,10 @@ class ListPage extends StatelessWidget {
   }
 
   Widget _buildList(BuildContext context) {
-    return FutureBuilder<String>(
-      future: DefaultAssetBundle.of(context)
-          .loadString('assets/local_restaurant.json'),
-      builder: (context, snapshot) {
-        final List<Restaurant> restaurants = parseRestaurant(snapshot.data);
-        return ListView.builder(
-          itemCount: restaurants.length,
-          itemBuilder: (context, index) {
-            return _buildRestaurantItem(context, restaurants[index]);
-          },
-        );
+    return ListView.builder(
+      itemCount: restaurants.length,
+      itemBuilder: (context, index) {
+        return _buildRestaurantItem(context, restaurants[index]);
       },
     );
   }
@@ -59,6 +55,12 @@ class ListPage extends StatelessWidget {
                             restaurant.pictureId,
                             width: 100,
                             fit: BoxFit.fill,
+                            errorBuilder: (context, exception, stackTrace) {
+                              return Image.asset(
+                                'images/error.png',
+                                fit: BoxFit.cover,
+                              );
+                            },
                           ),
                         ),
                       ),
@@ -76,7 +78,7 @@ class ListPage extends StatelessWidget {
                                   style: Theme.of(context)
                                       .textTheme
                                       .headline6!
-                                      .copyWith(color: Colors.blue[800]),
+                                      .copyWith(color: Colors.indigo[900]),
                                 ),
                               ],
                             ),
