@@ -1,16 +1,21 @@
-# restaurant_app
+# Restaurant Application
+Flutter project for [dicoding](https://www.dicoding.com/academies/195) course submission. For now, the datas are static datas provided by the course.
 
-A new Flutter project.
 
-## Getting Started
+## External packages
+* [google_fonts](https://pub.dev/packages/google_fonts)
+* [flutter_rating_bar](https://pub.dev/packages/flutter_rating_bar)
+* [page_transition](https://pub.dev/packages/page_transition)
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
+## Feature
+* Nothing here yet ...
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Summary
+1. Open splash screen while parsing data from json file
+2. Build a page containing list of parsed datas
+3. Build a detail page when clicking one of the entry
+4. In the detail page, create a modal bottom sheet containing menus created using table.
+
+## Screenshots
