@@ -21,14 +21,14 @@ final TextTheme myTextTheme = TextTheme(
       fontSize: 15, fontWeight: FontWeight.w400, letterSpacing: 0.15),
   subtitle2: GoogleFonts.raleway(
       fontSize: 13, fontWeight: FontWeight.w500, letterSpacing: 0.1),
-  bodyText1: GoogleFonts.libreFranklin(
+  bodyText1: GoogleFonts.lato(
       fontSize: 16, fontWeight: FontWeight.w400, letterSpacing: 0.5),
-  bodyText2: GoogleFonts.libreFranklin(
+  bodyText2: GoogleFonts.lato(
       fontSize: 14, fontWeight: FontWeight.w400, letterSpacing: 0.25),
-  button: GoogleFonts.libreFranklin(
+  button: GoogleFonts.lato(
       fontSize: 14, fontWeight: FontWeight.w500, letterSpacing: 1.25),
-  caption: GoogleFonts.libreFranklin(
+  caption: GoogleFonts.lato(
       fontSize: 12, fontWeight: FontWeight.w400, letterSpacing: 0.4),
-  overline: GoogleFonts.libreFranklin(
+  overline: GoogleFonts.lato(
       fontSize: 10, fontWeight: FontWeight.w400, letterSpacing: 1.5),
 );
