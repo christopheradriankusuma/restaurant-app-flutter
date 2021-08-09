@@ -31,7 +31,7 @@ class Restaurant {
 
   @override
   String toString() {
-    return '$menus';
+    return 'Restaurant <$name>';
   }
 }
 
