@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:restaurant_app/detail_page.dart';
-import 'package:restaurant_app/list_page.dart';
-import 'package:restaurant_app/restaurant.dart';
+import 'package:restaurant_app/ui/detail_page.dart';
+import 'package:restaurant_app/ui/list_page.dart';
+import 'package:restaurant_app/data/model/restaurant.dart';
 import 'package:restaurant_app/splash_screen.dart';
-import 'package:restaurant_app/styles.dart';
+import 'package:restaurant_app/common/styles.dart';
 
 void main() => runApp(MyApp());
 
@@ -13,6 +13,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Dicoding Restaurant',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         textTheme: myTextTheme,
         primaryColor: primaryColor,
@@ -35,8 +36,7 @@ class MyApp extends StatelessWidget {
       routes: {
         SplashScreen.routeName: (context) => SplashScreen(),
         RestaurantDetail.routeName: (context) => RestaurantDetail(
-              restaurant:
-                  ModalRoute.of(context)?.settings.arguments as Restaurant,
+              id: ModalRoute.of(context)?.settings.arguments as String,
             ),
       },
     );
