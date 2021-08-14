@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:restaurant_app/list_page.dart';
-import 'package:restaurant_app/restaurant.dart';
-import 'package:restaurant_app/styles.dart';
+import 'package:restaurant_app/data/api/api_service.dart';
+import 'package:restaurant_app/ui/list_page.dart';
+import 'package:restaurant_app/data/model/restaurant.dart';
+import 'package:restaurant_app/common/styles.dart';
 
 class SplashScreen extends StatefulWidget {
   static const String routeName = '/splash';
@@ -13,28 +13,25 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   late List<Restaurant> restaurants;
+  final ApiService _service = ApiService();
 
   void navigationPage() {
     Navigator.of(context)
         .pushReplacementNamed(ListPage.routeName, arguments: restaurants);
   }
 
-  Future<String> loadAsset() async {
-    return await rootBundle.loadString('assets/local_restaurant.json');
-  }
-
-  void readFile() async {
-    final String json = await loadAsset();
-
-    restaurants = parseRestaurant(json);
-
+  void fetchList() async {
+    final res = await _service.list();
+    if (res.error == false) {
+      restaurants = res.restaurants;
+    }
     Timer(Duration(milliseconds: 1200), navigationPage);
   }
 
   @override
   void initState() {
     super.initState();
-    readFile();
+    fetchList();
   }
 
   @override
