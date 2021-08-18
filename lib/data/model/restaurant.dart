@@ -16,19 +16,21 @@ class RestaurantsResult {
         message: json["message"],
         restaurants: [Restaurant.fromJson(json["restaurant"])],
       );
-    } else {
+    } else if (method == "list") {
       return RestaurantsResult(
         error: json["error"],
         message: json["message"],
         restaurants: List<Restaurant>.from(
             (json["restaurants"] as List).map((e) => Restaurant.fromJson(e))),
       );
+    } else {
+      return RestaurantsResult(
+        error: json["error"],
+        message: json["founded"].toString(),
+        restaurants: List<Restaurant>.from(
+            (json["restaurants"] as List).map((e) => Restaurant.fromJson(e))),
+      );
     }
-  }
-
-  @override
-  String toString() {
-    return "$restaurants";
   }
 }
 
@@ -59,19 +61,7 @@ class Restaurant {
 
   @override
   String toString() {
-    String result = "";
-    result += id + "\n";
-    result += name + "\n";
-    result += description + "\n";
-    result += city + "\n";
-    result += address! + "\n";
-    result += pictureId + "\n";
-    result += categories.toString() + "\n";
-    result += menus.toString() + "\n";
-    result += rating.toString() + "\n";
-    result += customerReviews.toString() + "\n";
-
-    return result;
+    return "Restaurant: $name";
   }
 
   factory Restaurant.fromJson(Map<String, dynamic> json) => Restaurant(
