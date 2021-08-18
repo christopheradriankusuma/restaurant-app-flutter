@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:provider/provider.dart';
+import 'package:restaurant_app/common/styles.dart';
+import 'package:restaurant_app/data/model/restaurant.dart';
+import 'package:restaurant_app/provider/search_provider.dart';
 import 'package:restaurant_app/ui/detail_page.dart';
 import 'package:restaurant_app/ui/list_page.dart';
-import 'package:restaurant_app/data/model/restaurant.dart';
-import 'package:restaurant_app/splash_screen.dart';
-import 'package:restaurant_app/common/styles.dart';
+import 'package:restaurant_app/ui/splash_screen.dart';
+import 'package:restaurant_app/ui/search_page.dart';
 
 void main() => runApp(MyApp());
 
@@ -37,6 +40,10 @@ class MyApp extends StatelessWidget {
         SplashScreen.routeName: (context) => SplashScreen(),
         RestaurantDetail.routeName: (context) => RestaurantDetail(
               id: ModalRoute.of(context)?.settings.arguments as String,
+            ),
+        SearchPage.routeName: (context) => ChangeNotifierProvider(
+              create: (_) => SearchProvider(),
+              child: SearchPage(),
             ),
       },
     );
