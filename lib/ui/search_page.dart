@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:restaurant_app/provider/search_provider.dart';
 import 'package:restaurant_app/ui/detail_page.dart';
-import 'package:restaurant_app/ui/list_page.dart';
+import 'package:restaurant_app/widget/restaurant_tile.dart';
 
 class SearchPage extends StatelessWidget {
   static const String routeName = '/search';
