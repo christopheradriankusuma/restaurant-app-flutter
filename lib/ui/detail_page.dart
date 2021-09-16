@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:restaurant_app/data/model/restaurant.dart';
-import 'package:restaurant_app/provider/restaurant_detail_provider.dart';
+import 'package:restaurant_app/provider/database_provider.dart';
 
 class RestaurantDetail extends StatelessWidget {
   static const String routeName = '/detail';
-  final String id;
+  final Restaurant restaurant;
 
-  RestaurantDetail({required this.id});
+  RestaurantDetail({required this.restaurant});
 
   List<TableRow> _createTable(context, Restaurant restaurant) {
     List<TableRow> result = [];
@@ -49,196 +50,229 @@ class RestaurantDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<RestaurantDetailProvider>(
-      create: (_) => RestaurantDetailProvider(id: id),
-      child: Consumer<RestaurantDetailProvider>(
-        builder: (context, snapshot, _) {
-          var state = snapshot.state;
-
-          if (state == ResultState.Loading) {
-            return Scaffold(
-              body: Container(
-                color: Theme.of(context).backgroundColor,
-                child: Center(
-                  child: CircularProgressIndicator(),
-                ),
-              ),
-            );
-          } else if (state == ResultState.HasData) {
-            return Scaffold(
-              body: Container(
-                color: Theme.of(context).backgroundColor,
-                child: CustomScrollView(
-                  slivers: [
-                    SliverAppBar(
-                      leading: CircleAvatar(
-                        backgroundColor: Colors.black87,
-                        child: IconButton(
-                          icon: Icon(Icons.arrow_back),
-                          color: Colors.blue,
-                          padding: const EdgeInsets.all(2),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
+    return Consumer<DatabaseProvider>(
+      builder: (context, snapshot, _) {
+        return Scaffold(
+          body: Container(
+            color: Theme.of(context).backgroundColor,
+            child: CustomScrollView(
+              slivers: [
+                SliverAppBar(
+                  leading: CircleAvatar(
+                    backgroundColor: Colors.black87,
+                    child: IconButton(
+                      icon: Icon(Icons.arrow_back),
+                      color: Colors.blue,
+                      padding: const EdgeInsets.all(2),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ),
+                  leadingWidth: 44,
+                  pinned: true,
+                  expandedHeight: 200,
+                  flexibleSpace: Stack(
+                    children: [
+                      Positioned.fill(
+                        child: Hero(
+                          tag: restaurant.pictureId,
+                          child: Image.network(
+                            "https://restaurant-api.dicoding.dev/images/small/${restaurant.pictureId}",
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, exception, stackTrace) {
+                              return Image.asset(
+                                'images/error.png',
+                                fit: BoxFit.cover,
+                              );
+                            },
+                          ),
                         ),
                       ),
-                      leadingWidth: 44,
-                      pinned: true,
-                      expandedHeight: 200,
-                      flexibleSpace: Stack(
+                    ],
+                  ),
+                ),
+                SliverPersistentHeader(
+                  pinned: true,
+                  delegate: SliverAppBarDelegate(
+                    minHeight: 120,
+                    maxHeight: 160,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 4),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Positioned.fill(
-                            child: Hero(
-                              tag: snapshot.restaurant.pictureId,
-                              child: Image.network(
-                                "https://restaurant-api.dicoding.dev/images/small/${snapshot.restaurant.pictureId}",
-                                fit: BoxFit.cover,
-                                errorBuilder: (context, exception, stackTrace) {
-                                  return Image.asset(
-                                    'images/error.png',
-                                    fit: BoxFit.cover,
-                                  );
-                                },
-                              ),
+                          FittedBox(
+                            fit: BoxFit.contain,
+                            child: Text(
+                              restaurant.name,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline3!
+                                  .copyWith(
+                                    color: Theme.of(context).primaryColor,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                             ),
                           ),
-                        ],
-                      ),
-                    ),
-                    SliverPersistentHeader(
-                      pinned: true,
-                      delegate: SliverAppBarDelegate(
-                        minHeight: 120,
-                        maxHeight: 120,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 4),
-                          child: Column(
+                          Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
                             children: [
-                              FittedBox(
-                                fit: BoxFit.contain,
-                                child: Text(
-                                  snapshot.restaurant.name,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headline3!
-                                      .copyWith(
-                                        color: Theme.of(context).primaryColor,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                ),
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                              Row(
                                 children: [
-                                  Row(
-                                    children: [
-                                      Icon(Icons.pin_drop),
-                                      Text(snapshot.restaurant.city,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyText1!),
-                                    ],
+                                  Icon(Icons.pin_drop),
+                                  Text(
+                                    restaurant.city,
+                                    style:
+                                        Theme.of(context).textTheme.bodyText1!,
                                   ),
-                                  SizedBox(height: 8),
-                                  Row(
-                                    children: [
-                                      RatingBarIndicator(
-                                        rating: snapshot.restaurant.rating
-                                            .toDouble(),
-                                        itemCount: 5,
-                                        itemSize: 20,
-                                        direction: Axis.horizontal,
-                                        itemBuilder: (context, index) => Icon(
-                                          Icons.star,
-                                          color: Colors.amber,
-                                        ),
-                                      ),
-                                      Text(
-                                        '${snapshot.restaurant.rating}',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .subtitle1,
-                                      ),
-                                    ],
-                                  )
+                                ],
+                              ),
+                              SizedBox(height: 4),
+                              Row(
+                                children: [
+                                  IconButton(
+                                    icon: Icon(Icons.favorite),
+                                    color: snapshot.restaurants
+                                            .map((e) => e.pictureId)
+                                            .contains(restaurant.pictureId)
+                                        ? Colors.red
+                                        : Colors.black,
+                                    padding: const EdgeInsets.all(0),
+                                    constraints: BoxConstraints(),
+                                    onPressed: () {
+                                      snapshot.updateFavorite(restaurant);
+                                      Fluttertoast.showToast(
+                                        msg: snapshot.restaurants
+                                                .map((e) => e.pictureId)
+                                                .contains(restaurant.pictureId)
+                                            ? 'Favorite added'
+                                            : 'Favorite removed',
+                                        toastLength: Toast.LENGTH_SHORT,
+                                        gravity: ToastGravity.BOTTOM,
+                                        backgroundColor: Colors.grey[600],
+                                        timeInSecForIosWeb: 1,
+                                      );
+                                    },
+                                  ),
+                                  Text(
+                                    'Favorite',
+                                    style:
+                                        Theme.of(context).textTheme.bodyText1!,
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 4),
+                              Row(
+                                children: [
+                                  RatingBarIndicator(
+                                    rating: restaurant.rating.toDouble(),
+                                    itemCount: 5,
+                                    itemSize: 20,
+                                    direction: Axis.horizontal,
+                                    itemBuilder: (context, index) => Icon(
+                                      Icons.star,
+                                      color: Colors.amber,
+                                    ),
+                                  ),
+                                  Text(
+                                    '${restaurant.rating}',
+                                    style:
+                                        Theme.of(context).textTheme.subtitle1,
+                                  ),
                                 ],
                               ),
                             ],
                           ),
-                        ),
-                      ),
-                    ),
-                    SliverList(
-                      delegate: SliverChildListDelegate(
-                        [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 8),
-                            child: Text(
-                              snapshot.restaurant.description,
-                              style: Theme.of(context).textTheme.bodyText1,
-                            ),
-                          ),
                         ],
                       ),
                     ),
-                  ],
+                  ),
                 ),
-              ),
-              floatingActionButton: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  FloatingActionButton(
-                    child: Text('Review'),
-                    heroTag: null,
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                            title: Text('Coming soon!'),
-                            actions: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                child: Text('Ok'),
-                              ),
-                            ],
-                          );
-                        },
+                SliverList(
+                  delegate: SliverChildListDelegate(
+                    [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 8),
+                        child: Text(
+                          restaurant.description,
+                          style: Theme.of(context).textTheme.bodyText1,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          floatingActionButton: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              FloatingActionButton(
+                child: Text('Review'),
+                heroTag: null,
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: Text('Coming soon!'),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: Text('Ok'),
+                          ),
+                        ],
                       );
                     },
-                  ),
-                  SizedBox(width: 12),
-                  FloatingActionButton(
-                    child: Text('Menu'),
-                    heroTag: null,
-                    onPressed: () {
-                      showModalBottomSheet(
-                        isScrollControlled: true,
-                        context: context,
-                        backgroundColor: Colors.transparent,
-                        builder: (context) {
-                          return Container(
-                            height: MediaQuery.of(context).size.height * 0.75,
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).backgroundColor,
-                              borderRadius: BorderRadius.only(
-                                topLeft: const Radius.circular(25.0),
-                                topRight: const Radius.circular(25.0),
+                  );
+                },
+              ),
+              SizedBox(width: 12),
+              FloatingActionButton(
+                child: Text('Menu'),
+                heroTag: null,
+                onPressed: () {
+                  showModalBottomSheet(
+                    isScrollControlled: true,
+                    context: context,
+                    backgroundColor: Colors.transparent,
+                    builder: (context) {
+                      return Container(
+                        height: MediaQuery.of(context).size.height * 0.75,
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).backgroundColor,
+                          borderRadius: BorderRadius.only(
+                            topLeft: const Radius.circular(25.0),
+                            topRight: const Radius.circular(25.0),
+                          ),
+                        ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 6),
+                              child: Text(
+                                'Menu',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headline4!
+                                    .copyWith(
+                                      fontSize: 40,
+                                      color: Colors.indigo[900],
+                                    ),
                               ),
                             ),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.max,
+                            Row(
                               children: [
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 6),
+                                Expanded(
                                   child: Text(
-                                    'Menu',
+                                    'Foods',
                                     style: Theme.of(context)
                                         .textTheme
                                         .headline4!
@@ -246,89 +280,42 @@ class RestaurantDetail extends StatelessWidget {
                                           fontSize: 40,
                                           color: Colors.indigo[900],
                                         ),
+                                    textAlign: TextAlign.center,
                                   ),
                                 ),
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: Text(
-                                        'Foods',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headline4!
-                                            .copyWith(
-                                              fontSize: 40,
-                                              color: Colors.indigo[900],
-                                            ),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    ),
-                                    Expanded(
-                                      child: Text(
-                                        'Drinks',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headline4!
-                                            .copyWith(
-                                              fontSize: 40,
-                                              color: Colors.indigo[900],
-                                            ),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    ),
-                                  ],
-                                ),
                                 Expanded(
-                                  child: SingleChildScrollView(
-                                    child: Table(
-                                      children: _createTable(
-                                          context, snapshot.restaurant),
-                                    ),
+                                  child: Text(
+                                    'Drinks',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline4!
+                                        .copyWith(
+                                          fontSize: 40,
+                                          color: Colors.indigo[900],
+                                        ),
+                                    textAlign: TextAlign.center,
                                   ),
                                 ),
                               ],
                             ),
-                          );
-                        },
+                            Expanded(
+                              child: SingleChildScrollView(
+                                child: Table(
+                                  children: _createTable(context, restaurant),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       );
                     },
-                  ),
-                ],
+                  );
+                },
               ),
-            );
-          } else if (state == ResultState.HasError) {
-            return Scaffold(
-              appBar: AppBar(),
-              body: Container(
-                color: Theme.of(context).backgroundColor,
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Error Occured',
-                        style: Theme.of(context)
-                            .textTheme
-                            .headline4!
-                            .copyWith(color: Colors.black),
-                      ),
-                      Text(
-                        'Try again later',
-                        style: Theme.of(context)
-                            .textTheme
-                            .headline5!
-                            .copyWith(color: Colors.black),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            );
-          } else {
-            return Text('');
-          }
-        },
-      ),
+            ],
+          ),
+        );
+      },
     );
   }
 }
