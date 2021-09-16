@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:restaurant_app/data/api/api_service.dart';
 import 'package:restaurant_app/data/model/restaurant.dart';
-
-enum ResultState { Loading, HasData, HasError, NoData, NoSearch }
+import 'package:restaurant_app/utils/result_state.dart';
 
 class SearchProvider extends ChangeNotifier {
   List<Restaurant> _restaurants = [];

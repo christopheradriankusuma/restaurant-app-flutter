@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:restaurant_app/data/api/api_service.dart';
 import 'package:restaurant_app/data/model/restaurant.dart';
 
 class RestaurantTile extends StatelessWidget {
@@ -12,8 +13,10 @@ class RestaurantTile extends StatelessWidget {
     return Column(
       children: [
         GestureDetector(
-          onTap: () {
-            Navigator.pushNamed(context, '/detail', arguments: restaurant.id);
+          onTap: () async {
+            var result = await ApiService().detail(id: restaurant.id);
+            Restaurant rest = result.restaurants[0];
+            Navigator.pushNamed(context, '/detail', arguments: rest);
           },
           behavior: HitTestBehavior.opaque,
           child: Container(
@@ -52,12 +55,14 @@ class RestaurantTile extends StatelessWidget {
                         children: [
                           Row(
                             children: [
-                              Text(
-                                restaurant.name,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headline6!
-                                    .copyWith(color: Colors.indigo[900]),
+                              Expanded(
+                                child: Text(
+                                  restaurant.name,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline6!
+                                      .copyWith(color: Colors.indigo[900]),
+                                ),
                               ),
                             ],
                           ),
@@ -94,7 +99,7 @@ class RestaurantTile extends StatelessWidget {
                         ],
                       ),
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
