@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:restaurant_app/common/navigation.dart';
 import 'package:restaurant_app/data/api/api_service.dart';
 import 'package:restaurant_app/data/model/restaurant.dart';
+import 'package:restaurant_app/ui/detail_page.dart';
 
 class RestaurantTile extends StatelessWidget {
   final Restaurant restaurant;
@@ -16,7 +18,7 @@ class RestaurantTile extends StatelessWidget {
           onTap: () async {
             var result = await ApiService().detail(id: restaurant.id);
             Restaurant rest = result.restaurants[0];
-            Navigator.pushNamed(context, '/detail', arguments: rest);
+            Navigation.intentWithData(RestaurantDetail.routeName, rest);
           },
           behavior: HitTestBehavior.opaque,
           child: Container(
