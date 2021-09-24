@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
+import 'package:restaurant_app/common/navigation.dart';
 import 'package:restaurant_app/data/model/restaurant.dart';
 import 'package:restaurant_app/provider/database_provider.dart';
 
@@ -65,7 +66,7 @@ class RestaurantDetail extends StatelessWidget {
                       color: Colors.blue,
                       padding: const EdgeInsets.all(2),
                       onPressed: () {
-                        Navigator.pop(context);
+                        Navigation.back();
                       },
                     ),
                   ),
@@ -148,8 +149,8 @@ class RestaurantDetail extends StatelessWidget {
                                         msg: snapshot.restaurants
                                                 .map((e) => e.pictureId)
                                                 .contains(restaurant.pictureId)
-                                            ? 'Favorite added'
-                                            : 'Favorite removed',
+                                            ? 'Favorite removed'
+                                            : 'Favorite added',
                                         toastLength: Toast.LENGTH_SHORT,
                                         gravity: ToastGravity.BOTTOM,
                                         backgroundColor: Colors.grey[600],
