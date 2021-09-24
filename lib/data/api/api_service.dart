@@ -4,7 +4,6 @@ import 'package:restaurant_app/data/model/restaurant.dart';
 
 class ApiService {
   static final String _baseUrl = 'https://restaurant-api.dicoding.dev';
-  // static final String _apiKey = '12345';
 
   Future<RestaurantsResult> list() async {
     final response = await http.get(Uri.parse(_baseUrl + "/list"));
