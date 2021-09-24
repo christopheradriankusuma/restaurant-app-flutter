@@ -32,6 +32,12 @@ class RestaurantsResult {
       );
     }
   }
+
+  Map<String, dynamic> toJson() => {
+        "error": error,
+        "message": message,
+        "restaurants": List<dynamic>.from(restaurants.map((e) => e.toJson())),
+      };
 }
 
 class Restaurant {
@@ -108,6 +114,10 @@ class Names {
   factory Names.fromJson(Map<String, dynamic> json) => Names(
         name: json["name"],
       );
+
+  Map<String, dynamic> toJson() => {
+        'name': name,
+      };
 }
 
 class CustomerReview {
@@ -126,6 +136,12 @@ class CustomerReview {
         review: json["review"],
         date: json["date"],
       );
+
+  Map<String, dynamic> toJson() => {
+        'name': name,
+        'review': review,
+        'date': date,
+      };
 }
 
 class Menus {
@@ -141,4 +157,9 @@ class Menus {
         foods: List<Names>.from(json["foods"].map((x) => Names.fromJson(x))),
         drinks: List<Names>.from(json["drinks"].map((x) => Names.fromJson(x))),
       );
+
+  Map<String, dynamic> toJson() => {
+        'foods': foods,
+        'drinks': drinks,
+      };
 }
