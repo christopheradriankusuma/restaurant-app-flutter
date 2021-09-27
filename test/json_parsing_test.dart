@@ -24,7 +24,8 @@ void main() {
             200),
       );
 
-      RestaurantsResult restaurantsResult = await ApiService().list();
+      RestaurantsResult restaurantsResult =
+          await ApiService().list(client: client);
       bool result = restaurantsResult.restaurants.length > 0;
       expect(result, true);
     },
