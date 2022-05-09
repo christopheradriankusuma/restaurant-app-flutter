@@ -1,6 +1,5 @@
 import 'package:restaurant_app/provider/preferences_provider.dart';
 import 'package:restaurant_app/provider/scheduling_provider.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

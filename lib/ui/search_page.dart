@@ -106,7 +106,7 @@ class SearchPage extends StatelessWidget {
                         );
                       } else if (state == ResultState.NoData) {
                         return Image.asset('images/error.png');
-                      } else if (state == ResultState.HasError) {
+                      } else {
                         return Center(
                           child: Text(
                             'Try checking your internet connection',

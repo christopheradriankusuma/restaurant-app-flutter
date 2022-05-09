@@ -69,9 +69,10 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           textTheme: myTextTheme,
           primaryColor: primaryColor,
-          accentColor: secondaryColor,
           backgroundColor: backgroundColor,
           appBarTheme: AppBarTheme(backgroundColor: appBarColor),
+          colorScheme:
+              ColorScheme.fromSwatch().copyWith(secondary: secondaryColor),
         ),
         initialRoute: SplashScreen.routeName,
         onGenerateRoute: (settings) {
@@ -83,6 +84,8 @@ class MyApp extends StatelessWidget {
                 type: PageTransitionType.rightToLeft,
                 duration: Duration(milliseconds: 750),
               );
+            default:
+              return null;
           }
         },
         routes: {
